@@ -1,0 +1,6 @@
+# BrainChip MetaTF tools. Used on the self-hosted runner only.
+# TODO: pin exact versions (and the Python version) after the first hardware check.
+# The Akida tools constrain the Python and TensorFlow versions, so pick them once and keep them.
+akida
+cnn2snn
+quantizeml

@@ -1,0 +1,48 @@
+name: hw
+
+# Chip tier: runs on the self-hosted server with the AKD1000 card.
+# Triggers on pushes to this repo only. pull_request is deliberately not a trigger, so code from
+# forks never reaches the self-hosted runner. Checks from a push show up on the branch's PR.
+# Serialization: keep exactly one runner registered with the `akida` label; its jobs run one at a
+# time. A workflow `concurrency` group is not used because GitHub keeps only one pending run per
+# group and cancels older pending ones, which would drop pushes from other members.
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chip:
+    if: github.event.repository.fork == false
+    runs-on: [self-hosted, linux, akida]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create venv
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r requirements-dev.txt -r requirements-akida.txt
+
+      - name: Preflight (card, driver, akida package)
+        run: bash scripts/hw_preflight.sh .venv/bin/python
+
+      - name: Chip tests
+        run: |
+          mkdir -p outputs
+          flock "${AKIDA_LOCK:-/tmp/akida.lock}" \
+            .venv/bin/python -m pytest -m hw -v --junitxml=outputs/hw-junit.xml
+
+      # TODO: add a workflow_dispatch step that runs the full fog/noise/low-contrast evaluation
+      # and writes accuracy.csv, energy.csv and layers.csv into outputs/, once that script exists.
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hw-${{ github.sha }}
+          path: outputs/
+          retention-days: 14
+          if-no-files-found: ignore

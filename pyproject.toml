@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["hw: needs the AKD1000 card (self-hosted runner only)"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = [".venv"]
