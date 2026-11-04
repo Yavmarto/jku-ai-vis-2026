@@ -20,10 +20,11 @@ We compare a **quantized CNN baseline** with its **SNN-converted counterpart** r
 |---|---|---|
 | 21.10 | Register group of 4 on Moodle | Past. Group informed, one entry only. |
 | 28.10 | Register task and model on Moodle | Past. Update the existing entry if already registered, do not create a second one. |
-| 11.11 | Midpoint deadline | Next. The submission format and the two-pair setup were announced in the 29.10 session. That material is not in our files, so confirm it on Moodle or in the recording. |
-| 09.12 | Final presentations | |
+| 05.11 / 06.11 | Feedback sessions (not mandatory) | 10-min slots, Thu 05.11 12:00-15:15 (S3 055 and online) and Fri 06.11 08:30-10:00 (online). The booking link is posted on Moodle. A team (both pairs) can book only one slot. |
+| 11.11 23:59 | Midpoint submission (end of Phase I) | Next. Public GitHub repo link, AI interaction record for Phase I (in the repo), reflection on GenAI usage (in the repo), recorded progress video of at most 5 min (over the limit costs points). |
+| 09.12 23:59 | Final submission (end of Phase II) | Complete code from both pairs, AI interaction records from both phases, 10-min recorded presentation plus slide deck (over the limit costs points). |
 
-Final presentation (09.12): attendance is compulsory for the final live presentation session (Lecture 01). The presentation is 5 minutes, everyone submits a video, and a random subset presents live and is graded on it. All four members should be present.
+Final presentation: the last two lab sessions are live presentations. A random subset of projects presents live instead of playing the recording, and the whole group or one member can present. Keep all four available. Source: Moodle assignment text. The 29.10 session itself is not in our files.
 
 ## Task and models
 
@@ -47,6 +48,7 @@ Outputs: `accuracy.csv` (`model, corruption, severity, n_images, top1`) and `ene
 - For the converted model, record per layer the share of non-zero activations (sparsity) for each corruption and severity, for the same images used in Phase I.
 - Visualize activity per layer against severity. The question is whether activity fades toward the last layers as corruption grows ("spike death"), or whether it behaves differently per corruption.
 - State a testable claim up front, for example "low contrast makes activity die out before the last layers", and report it even if it turns out false.
+- **Two techniques:** Moodle requires each pair to use at least two explanation techniques in Phase II and to compare or combine them. Layer-wise sparsity is one. Pick a second that fits a conv net, for example saliency/gradient maps on the float model, or k-nearest neighbors in embedding space. Decide this at the start of Phase II.
 - **Spike rasters:** attempt only if MetaTF/Akida exposes per-timestep or per-event data without much effort. Otherwise list it as a stretch goal and limitation.
 
 Wording note: the AKD1000 computes only on non-zero activations, but the values are small integers, not single-bit spikes. Phase II measures "sparse activity", and we call it a proxy for spike death in the write-up.
@@ -56,6 +58,15 @@ Output: `layers.csv` (`image_id, corruption, severity, layer_index, layer_name, 
 ## AI4VIS: LLM support for visualization design and analysis
 
 The course asks us to record how generative AI supports and influences the design and analysis process, across Phase I, Phase II and the presentation.
+
+**Pair setup (Moodle):** the group splits into two pairs. The **AI-aided pair** uses ChatGPT/Claude as an active part of the process (brainstorming, interpreting views, generating views and code). The **human-only pair** uses no generative AI and relies on its own reasoning and code. It may still use AI lightly for code completion (not generation) and for searching and understanding documentation. Both pairs work on the same model and task. **The pairs switch roles at the end of Phase I.**
+
+- At the start of each phase all four agree a common direction: main questions, data, starting visualization, which Phase I findings go to Phase II.
+- Then the pairs work separately. They may talk, but must not make the two pipelines identical, so the differences can be discussed.
+- At the end of each phase the pairs compare process and findings: insights one pair missed, different visualization choices, breadth and depth, speed versus verification effort, confidence and its evidence. Not a contest.
+- The AI-aided pair is expected to build richer interaction or broaden the analysis.
+
+**Records (AI-aided pair, each phase):**
 
 - Keep a prompt log from day one: important prompts, tool (ChatGPT or Claude), result, accepted/rejected/refined, and why.
 - Use the LLMs for sketching views, writing plotting code, annotating results and transforming data, including the Phase I and Phase II views above.
@@ -84,6 +95,8 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 - **Environment:** the Akida tools need specific Python and TensorFlow versions. Pin them in one environment file early.
 - **Single machine:** the chip is in one server. Export data early so the group does not wait on it.
 - **Rasters:** not promised. Only attempted if easy.
+- **Public repo vs self-hosted runner:** the midpoint needs a public GitHub repo, but `docs/ci.md` advises against self-hosted runners on public repos. Before making it public, remove the `hw.yml` runner or restrict it (environment approval, no fork triggers), and keep the course PDFs and transcripts out. `Research/` holds those and is not tracked.
+- **Phase I depth:** a table of scores is not enough. Each pattern needs an explanation (why a cluster is dense, whether it has sub-clusters, what distinguishes it). Plan the questions before plotting.
 
 ## Plan to the final
 
@@ -91,12 +104,15 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 |---|---|
 | 05.11 | Hardware check: one image through the card, check what SDK stats and energy it reports |
 | 05.11 | Confirm the Moodle entry exists and matches the description below. Update it, do not duplicate. |
+| 05.11 | All four: agree the Phase I common direction (questions, data, starting view). Split into AI-aided and human-only pair. |
 | 07.11 | Network chosen, quantized and converted, clean accuracy for both |
 | 09.11 | Fog/noise/low-contrast run exported (`accuracy.csv`, `energy.csv`) |
-| 11.11 | Midpoint: Phase I prototype plots |
-| 25.11 | Phase II layer-activity data and views, claim tested |
-| 02.12 | Freeze results. AI4VIS log summarized. Slides drafted. |
-| 09.12 | Final presentation |
+| 10.11 | Pairs compare Phase I process and findings. Public repo ready with AI record and GenAI reflection. Video recorded. |
+| 11.11 | Midpoint submission (repo, AI record, reflection, 5-min video). Pairs then switch roles. |
+| 12.11 | Lab session 13:45-15:15 (S3 055 + online): Phase II practical examples and final submission/presentation details. Then all four agree the Phase II direction and which Phase I findings to follow up |
+| 25.11 | Phase II data and views with at least two techniques per pair, claim tested |
+| 02.12 | Freeze results. AI4VIS records and reflection summarized. Slides drafted. |
+| 09.12 | Final submission: code from both pairs, AI records, 10-min video, slide deck |
 
 ## Description to hand in
 
@@ -104,7 +120,7 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 
 **Phase I:** investigate where CNN and SNN behavior diverges under fog/noise/low-contrast at 5 severities, using confusion-matrix and projection views of agreement and confidence, and measured on-chip energy per inference
 
-**Phase II:** explain the divergence with layer-wise activity/sparsity as spike-death proxy; full spike rasters only as stretch/limitation
+**Phase II:** explain the divergence with layer-wise activity/sparsity as spike-death proxy, combined with a second technique (for example saliency maps or k-nearest neighbors); full spike rasters only as stretch/limitation
 
 **AI4VIS:** use ChatGPT/Claude while building the Phase I/II views; log prompts and accepted/rejected/refined decisions; report failure patterns and best practices
 

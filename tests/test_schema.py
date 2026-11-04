@@ -6,17 +6,10 @@ from pathlib import Path
 
 import pytest
 
+from lab.config import CSV_COLUMNS
+
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "results"
-
-CSV_COLUMNS = {
-    "accuracy.csv": ["model", "corruption", "severity", "n_images", "top1"],
-    "energy.csv": ["model", "corruption", "severity", "energy_per_inference", "source"],
-    "layers.csv": [
-        "image_id", "corruption", "severity", "layer_index", "layer_name",
-        "nonzero_count", "total_units",
-    ],
-}
 
 
 @pytest.mark.parametrize("name", ["team-info.json", "workload.json"])
@@ -34,9 +27,10 @@ def test_readme_exists():
 
 @pytest.mark.parametrize("name", sorted(CSV_COLUMNS))
 def test_result_csv_columns(name):
-    path = RESULTS / name
-    if not path.exists():
-        pytest.skip(f"results/{name} not exported yet")
-    with path.open(newline="", encoding="utf-8") as f:
-        header = next(csv.reader(f))
-    assert header == CSV_COLUMNS[name]
+    paths = list(RESULTS.glob(f"*/{name}"))  # results/<model name>/<file>
+    if not paths:
+        pytest.skip(f"no results/*/{name} exported yet")
+    for path in paths:
+        with path.open(newline="", encoding="utf-8") as f:
+            header = next(csv.reader(f))
+        assert header == CSV_COLUMNS[name], path
