@@ -1,0 +1,281 @@
+Input Notebook:  akidanet-imagenetc-card.ipynb
+Output Notebook: akidanet-imagenetc-card-executed.ipynb
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+Executing notebook with kernel: python3
+Executing Cell 1---------------------------------------
+Ending Cell 1------------------------------------------
+Executing Cell 2---------------------------------------
+2026-11-05 16:24:53.199976: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2026-11-05 16:24:53.202615: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2026-11-05 16:24:53.210840: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1793892293.225027  239563 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1793892293.229332  239563 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1793892293.240114  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240129  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240131  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240132  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2026-11-05 16:24:53.243963: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-05 16:24:53.199976: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2026-11-05 16:24:53.202615: I external/local_xla/xla/tsl/cuda/cudart_stub.cc:32] Could not find cuda drivers on your machine, GPU will not be used.
+2026-11-05 16:24:53.210840: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1793892293.225027  239563 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1793892293.229332  239563 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1793892293.240114  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240129  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240131  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1793892293.240132  239563 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2026-11-05 16:24:53.243963: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+
+2026-11-05 16:24:55.326006: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+2026-11-05 16:24:55.326006: E external/local_xla/xla/stream_executor/cuda/cuda_platform.cc:51] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+
+tensorflow 2.19.1
+akida 2.19.3
+cnn2snn 2.19.3
+quantizeml 1.2.5
+akida_models 1.14.2
+
+Ending Cell 2------------------------------------------
+Executing Cell 3---------------------------------------
+Ending Cell 3------------------------------------------
+Executing Cell 4---------------------------------------
+Ending Cell 4------------------------------------------
+Executing Cell 5---------------------------------------
+/home/moosebun2/miniconda3/envs/akida-env/lib/python3.11/site-packages/akida_models/model_io.py:147: UserWarning: Model akidanet_imagenet_224_alpha_50_iq8_wq4_aq4.h5 has been trained with akida_models 1.1.10 which is the last version supporting 1.0 models training. Continuing execution.
+  warnings.warn(f'Model {model_name_v1} has been trained with akida_models 1.1.10 which is '
+
+WARNING:tensorflow:No training configuration found in the save file, so the model was *not* compiled. Compile it manually.
+
+input : <dtype: 'float32'> (None, 224, 224, 3)
+output: (None, 1000)
+
+WARNING:tensorflow:5 out of the last 5 calls to <function preprocess_image at 0x7de22497d800> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+
+WARNING:tensorflow:6 out of the last 6 calls to <function preprocess_image at 0x7de22497d800> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+
+1/1 [==============================] - ETA: 0s
+1/1 [==============================] - 1s 659ms/step
+
+TF-Keras accuracy on the 10 sample images: 0.90
+
+Ending Cell 5------------------------------------------
+Executing Cell 6---------------------------------------
+Ending Cell 6------------------------------------------
+Executing Cell 7---------------------------------------
+akida IP version: IpVersion.v1
+                 Model Summary                  
+________________________________________________
+Input shape    Output shape  Sequences  Layers
+================================================
+[224, 224, 3]  [1, 1, 1000]  1          15    
+________________________________________________
+
+_____________________________________________________________
+Layer (type)              Output shape    Kernel shape     
+
+============== SW/conv_0-classifier (Software) ==============
+
+conv_0 (InputConv.)       [112, 112, 16]  (3, 3, 3, 16)    
+_____________________________________________________________
+conv_1 (Conv.)            [112, 112, 32]  (3, 3, 16, 32)   
+_____________________________________________________________
+conv_2 (Conv.)            [56, 56, 64]    (3, 3, 32, 64)   
+_____________________________________________________________
+conv_3 (Conv.)            [56, 56, 64]    (3, 3, 64, 64)   
+_____________________________________________________________
+separable_4 (Sep.Conv.)   [28, 28, 128]   (3, 3, 64, 1)    
+_____________________________________________________________
+                                          (1, 1, 64, 128)  
+_____________________________________________________________
+separable_5 (Sep.Conv.)   [28, 28, 128]   (3, 3, 128, 1)   
+_____________________________________________________________
+                                          (1, 1, 128, 128) 
+_____________________________________________________________
+separable_6 (Sep.Conv.)   [14, 14, 256]   (3, 3, 128, 1)   
+_____________________________________________________________
+                                          (1, 1, 128, 256) 
+_____________________________________________________________
+separable_7 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 256) 
+_____________________________________________________________
+separable_8 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 256) 
+_____________________________________________________________
+separable_9 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 256) 
+_____________________________________________________________
+separable_10 (Sep.Conv.)  [14, 14, 256]   (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 256) 
+_____________________________________________________________
+separable_11 (Sep.Conv.)  [14, 14, 256]   (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 256) 
+_____________________________________________________________
+separable_12 (Sep.Conv.)  [7, 7, 512]     (3, 3, 256, 1)   
+_____________________________________________________________
+                                          (1, 1, 256, 512) 
+_____________________________________________________________
+separable_13 (Sep.Conv.)  [1, 1, 512]     (3, 3, 512, 1)   
+_____________________________________________________________
+                                          (1, 1, 512, 512) 
+_____________________________________________________________
+classifier (Fully.)       [1, 1, 1000]    (1, 1, 512, 1000)
+_____________________________________________________________
+saved akidanet_imagenet_a05_224_v1.fbz
+
+Ending Cell 7------------------------------------------
+Executing Cell 8---------------------------------------
+Ending Cell 8------------------------------------------
+Executing Cell 9---------------------------------------
+Available devices: ['PCIe/NSoC_v2/0']
+
+                                      Model Summary                                      
+_________________________________________________________________________________________
+Input shape    Output shape  Sequences  Layers  NPs  Skip DMAs  External Memory (Bytes)
+=========================================================================================
+[224, 224, 3]  [1, 1, 1000]  1          15      68   0          400000                 
+_________________________________________________________________________________________
+
+_________________________
+Component (type)  Count
+=========================
+HRC               1    
+_________________________
+CNP1              67   
+_________________________
+FNP2              1    
+_________________________
+
+           External Memory Summary            
+______________________________________________
+Layer (type)         External Memory (Bytes)
+==============================================
+classifier (Fully.)  400000                 
+______________________________________________
+
+_________________________________________________________________________
+Layer (type)              Output shape    Kernel shape       Components
+
+========= HW/conv_0-classifier (Hardware) - size: 1361268 bytes =========
+
+conv_0 (InputConv.)       [112, 112, 16]  (3, 3, 3, 16)      1 HRC     
+_________________________________________________________________________
+conv_1 (Conv.)            [112, 112, 32]  (3, 3, 16, 32)     4 CNP1    
+_________________________________________________________________________
+conv_2 (Conv.)            [56, 56, 64]    (3, 3, 32, 64)     6 CNP1    
+_________________________________________________________________________
+conv_3 (Conv.)            [56, 56, 64]    (3, 3, 64, 64)     3 CNP1    
+_________________________________________________________________________
+separable_4 (Sep.Conv.)   [28, 28, 128]   (3, 3, 64, 1)      6 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 64, 128)              
+_________________________________________________________________________
+separable_5 (Sep.Conv.)   [28, 28, 128]   (3, 3, 128, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 128, 128)             
+_________________________________________________________________________
+separable_6 (Sep.Conv.)   [14, 14, 256]   (3, 3, 128, 1)     8 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 128, 256)             
+_________________________________________________________________________
+separable_7 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 256)             
+_________________________________________________________________________
+separable_8 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 256)             
+_________________________________________________________________________
+separable_9 (Sep.Conv.)   [14, 14, 256]   (3, 3, 256, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 256)             
+_________________________________________________________________________
+separable_10 (Sep.Conv.)  [14, 14, 256]   (3, 3, 256, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 256)             
+_________________________________________________________________________
+separable_11 (Sep.Conv.)  [14, 14, 256]   (3, 3, 256, 1)     4 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 256)             
+_________________________________________________________________________
+separable_12 (Sep.Conv.)  [7, 7, 512]     (3, 3, 256, 1)     8 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 256, 512)             
+_________________________________________________________________________
+separable_13 (Sep.Conv.)  [1, 1, 512]     (3, 3, 512, 1)     8 CNP1    
+_________________________________________________________________________
+                                          (1, 1, 512, 512)             
+_________________________________________________________________________
+classifier (Fully.)       [1, 1, 1000]    (1, 1, 512, 1000)  1 FNP2    
+_________________________________________________________________________
+
+AKD1000 on the 10 sample images: evaluate 0.80, predict-argmax 0.80, agreement with Keras 0.90 (BrainChip tutorial: 8/10)
+Floor power: 924.42 mW
+Average framerate = 11.51 fps
+Last inference power range (mW):  Avg 958.17 / Min 924.00 / Max 984.00 / Std 18.56 
+Last inference energy consumed (mJ/frame): 83.26
+Last inference clock: 146885656
+Last program clock: 993897
+
+Ending Cell 9------------------------------------------
+Executing Cell 10--------------------------------------
+Ending Cell 10-----------------------------------------
+Executing Cell 11--------------------------------------
+Ending Cell 11-----------------------------------------
+Executing Cell 12--------------------------------------
+2000 images per condition
+
+first chunk (250 images): card vs Keras agreement 0.776, energy 83.81 mJ/frame
+
+2026-11-05 16:28:21.496495: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2026-11-05 16:28:21.496495: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+fog             sev 1: keras 0.382 | akida card 0.377 | agree 0.788 | energy 84.87 mJ/frame  (196s)
+
+2026-11-05 16:31:37.613942: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2026-11-05 16:31:37.613942: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+fog             sev 2: keras 0.277 | akida card 0.282 | agree 0.742 | energy 85.1175 mJ/frame  (196s)
+
+fog             sev 3: keras 0.199 | akida card 0.204 | agree 0.712 | energy 84.53999999999999 mJ/frame  (195s)
+
+2026-11-05 16:38:06.697338: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2026-11-05 16:38:06.697338: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+fog             sev 4: keras 0.171 | akida card 0.172 | agree 0.718 | energy 84.50375 mJ/frame  (194s)
+
+fog             sev 5: keras 0.074 | akida card 0.072 | agree 0.712 | energy 84.3725 mJ/frame  (193s)
+
+gaussian_noise  sev 1: keras 0.299 | akida card 0.298 | agree 0.744 | energy 84.38624999999999 mJ/frame  (194s)
+
+gaussian_noise  sev 2: keras 0.145 | akida card 0.136 | agree 0.692 | energy 84.30625 mJ/frame  (195s)
+
+2026-11-05 16:51:03.912208: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+2026-11-05 16:51:03.912208: I tensorflow/core/framework/local_rendezvous.cc:407] Local rendezvous is aborting with status: OUT_OF_RANGE: End of sequence
+
+gaussian_noise  sev 3: keras 0.044 | akida card 0.046 | agree 0.659 | energy 84.2975 mJ/frame  (194s)
+
+gaussian_noise  sev 4: keras 0.013 | akida card 0.013 | agree 0.691 | energy 84.07875 mJ/frame  (195s)
+
+gaussian_noise  sev 5: keras 0.004 | akida card 0.005 | agree 0.728 | energy 84.0875 mJ/frame  (194s)
+
+contrast        sev 1: keras 0.396 | akida card 0.396 | agree 0.790 | energy 84.25999999999999 mJ/frame  (194s)
+
+contrast        sev 2: keras 0.289 | akida card 0.293 | agree 0.751 | energy 84.495 mJ/frame  (195s)
+
+contrast        sev 3: keras 0.130 | akida card 0.142 | agree 0.703 | energy 84.2575 mJ/frame  (193s)
+
+contrast        sev 4: keras 0.029 | akida card 0.032 | agree 0.659 | energy 84.16874999999999 mJ/frame  (194s)
+
+contrast        sev 5: keras 0.008 | akida card 0.007 | agree 0.629 | energy 83.925 mJ/frame  (194s)
+wrote ['results_card/accuracy.csv', 'results_card/agreement.csv', 'results_card/energy.csv', 'results_card/predictions.csv']
+
+Ending Cell 12-----------------------------------------
