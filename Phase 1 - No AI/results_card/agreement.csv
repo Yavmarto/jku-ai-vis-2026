@@ -1,0 +1,16 @@
+corruption,severity,n_images,agreement
+fog,1,2000,0.7880
+fog,2,2000,0.7420
+fog,3,2000,0.7120
+fog,4,2000,0.7175
+fog,5,2000,0.7115
+gaussian_noise,1,2000,0.7435
+gaussian_noise,2,2000,0.6915
+gaussian_noise,3,2000,0.6590
+gaussian_noise,4,2000,0.6910
+gaussian_noise,5,2000,0.7280
+contrast,1,2000,0.7905
+contrast,2,2000,0.7515
+contrast,3,2000,0.7030
+contrast,4,2000,0.6590
+contrast,5,2000,0.6290

@@ -1,0 +1,16 @@
+index,name,layer_type,input_dims,output_dims,input_bits,weights_bits,act_bits,activation
+0,conv_0,InputConvolutional,224x224x3,112x112x16,8,8,4,1
+1,conv_1,Convolutional,112x112x16,112x112x32,4,4,4,1
+2,conv_2,Convolutional,112x112x32,56x56x64,4,4,4,1
+3,conv_3,Convolutional,56x56x64,56x56x64,4,4,4,1
+4,separable_4,SeparableConvolutional,56x56x64,28x28x128,4,4,4,1
+5,separable_5,SeparableConvolutional,28x28x128,28x28x128,4,4,4,1
+6,separable_6,SeparableConvolutional,28x28x128,14x14x256,4,4,4,1
+7,separable_7,SeparableConvolutional,14x14x256,14x14x256,4,4,4,1
+8,separable_8,SeparableConvolutional,14x14x256,14x14x256,4,4,4,1
+9,separable_9,SeparableConvolutional,14x14x256,14x14x256,4,4,4,1
+10,separable_10,SeparableConvolutional,14x14x256,14x14x256,4,4,4,1
+11,separable_11,SeparableConvolutional,14x14x256,14x14x256,4,4,4,1
+12,separable_12,SeparableConvolutional,14x14x256,7x7x512,4,4,4,1
+13,separable_13,SeparableConvolutional,7x7x512,1x1x512,4,4,4,1
+14,classifier,FullyConnected,1x1x512,1x1x1000,4,4,1,0
