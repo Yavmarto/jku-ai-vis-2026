@@ -1,10 +1,10 @@
 # AI and Visualization Lab: Akida project proposal
 
-Issue: CEL-1192 · Updated 2026-11-03 · Replaces `akida-ai-vis-proposal-v2.md` (deleted). `akida-ai-vis-course-feasibility.md` stays for reference.
+Issue: CEL-1192 · Updated 2026-11-06 (switched to AkidaNet on ImageNet-C) · Replaces `akida-ai-vis-proposal-v2.md` (deleted). `akida-ai-vis-course-feasibility.md` stays for reference.
 
 ## The idea in one paragraph
 
-We compare a **quantized CNN baseline** with its **SNN-converted counterpart** running on a real BrainChip AKD1000, using clean images plus three corruptions: fog, noise and low contrast. Phase I investigates where and for which inputs the two models diverge, using accuracy degradation, confidence and on-chip energy per inference for both models. Phase II explains that divergence by looking inside the converted model, using layer-wise activity/sparsity as a proxy for "spike death" under corruption. AI4VIS logs how ChatGPT/Claude help us build these visualizations and reports the failure patterns and best practices we find.
+We compare a **quantized CNN baseline** with its **SNN-converted counterpart** running on a real BrainChip AKD1000, using ImageNet-C images with three corruptions: fog, Gaussian noise and contrast. Phase I investigates where and for which inputs the two models diverge, using accuracy degradation, confidence and on-chip energy per inference for both models. Phase II explains that divergence by looking inside the converted model, using layer-wise activity/sparsity as a proxy for "spike death" under corruption. AI4VIS logs how ChatGPT/Claude help us build these visualizations and reports the failure patterns and best practices we find.
 
 ## Scope (what is core, what is stretch)
 
@@ -28,20 +28,21 @@ Final presentation: the last two lab sessions are live presentations. A random s
 
 ## Task and models
 
-- **Task/model:** quantized MobileNetV2 or ResNet-18 vs its SNN counterpart on the BrainChip AKD1000 via MetaTF. Pick one network by the first conversion check (below).
-- **Baseline:** the quantized CNN.
-- **Converted model:** the same network converted with MetaTF (`quantizeml` / `cnn2snn` / `akida`) and mapped to the chip.
-- **Data:** corrupted-image robustness benchmark: CIFAR-10-C as the primary set (small, realistic for the chip), an ImageNet-C subset only if the network and time allow. Both benchmarks include fog, Gaussian noise and contrast corruptions with 5 severity levels.
-- **Fallback:** if conversion of the chosen network fails, use a pretrained model from the Akida 1.0 zoo (for example AkidaNet) with the same plan.
+- **Task/model:** BrainChip's pretrained, quantized **AkidaNet** (ImageNet, alpha 0.5, 224x224, 8-bit first layer, 4-bit weights and activations, `akidanet_imagenet_pretrained(0.5, quantized=True, bitwidth=4)`) vs its converted Akida 1.0 model on the AKD1000 via MetaTF. **No training.**
+- **Baseline:** the quantized Keras AkidaNet (run name `akidanet_keras_quantized`). Same weights as the converted model, so the difference between the two is the conversion, not quantization.
+- **Converted model:** the same network converted with `cnn2snn.convert` inside `set_akida_version(AkidaVersion.v1)` and mapped to the chip (`akidanet_akida_akd1000`). The simulator run of the same `.fbz` is `akidanet_akida_simulator`. Class scores come from `predict`, not `forward` (see `Model prep/check_forward_vs_predict.py`).
+- **Data:** ImageNet-C (Zenodo record 2235448): fog, Gaussian noise and contrast, severities 1 to 5. Cut to 2 images per class (2000 images per condition) with `scripts/make_imagenet_subset.py`.
+- **Why not MobileNetV2 on CIFAR-10-C (the original plan):** MobileNetV2 does not convert for Akida 1.0 (the AKD1000). Keras MobileNet's depthwise blocks and residual Add layers are not supported there; it only converts for Akida 2.0, which the card is not. AkidaNet is BrainChip's own Akida 1.0 network and comes pretrained and quantized, so this is the fallback the plan named.
+- **Clean baseline:** not measured yet, because the clean ImageNet validation images are not on the card machine. BrainChip publishes 61.30% clean top-1 for this model; cite it as published, not measured, until we run the clean images.
 
 ## Phase I: accuracy degradation and energy
 
-1. Evaluate both models on clean test images. Record top-1 accuracy.
+1. Evaluate both models on clean test images. Record top-1 accuracy. (Open: needs the ImageNet validation images, see Task and models.)
 2. Evaluate both models on fog, noise and low-contrast at severities 1 to 5.
 3. Report accuracy per corruption and severity, and the drop relative to clean accuracy.
-4. Report measured on-chip energy per inference for both models, from the SDK's power/energy output, on clean and on corrupted inputs.
+4. Report measured on-chip energy per inference for the converted model, from the AKD1000 power meter (`model.statistics`, mJ/frame including floor power). The Keras baseline runs on the CPU and has no on-chip energy; if we report anything for it, label the method and do not compare the two as if measured alike.
 
-Outputs: `accuracy.csv` (`model, corruption, severity, n_images, top1`) and `energy.csv` (`model, corruption, severity, energy_per_inference, source`).
+Outputs: `accuracy.csv` (`model, corruption, severity, n_images, top1`), `agreement.csv` (`corruption, severity, n_images, agreement`), `energy.csv` (`model, corruption, severity, energy_per_inference, source`) and `predictions.csv` (`image_id, corruption, severity, label, keras_pred, akida_pred`). Currently in `Phase 1 - No AI/results_card/` (AKD1000) and `results_sim/` (simulator). Both pairs read these files; neither pair runs the models in its own notebooks.
 
 ## Phase II: layer-wise activity as a spike-death proxy
 
@@ -77,7 +78,7 @@ The course asks us to record how generative AI supports and influences the desig
 
 Phase I views are investigative tools with the black box closed. The course marks a chart that only shows a performance metric as the wrong approach, so accuracy numbers go into the views below and are not plotted alone. Plain Python notebooks (Plotly/Altair or matplotlib) reading the three CSV files. Suggested views:
 
-- Confusion matrices per corruption and severity for both models, plus a difference matrix. Reorder classes by error similarity to reveal blocks.
+- Confusion matrices per corruption and severity for both models, plus a difference matrix. With 1000 ImageNet classes a full matrix is unreadable: group classes (for example WordNet superclasses) or show the top-k confused pairs, then reorder by error similarity to reveal blocks.
 - Projection (UMAP or t-SNE) of the test images or model embeddings, colored by whether CNN and SNN agree and by confidence, with drill-down to the images. Report the parameters (perplexity or neighbors) and do not read cluster sizes as meaningful (Lecture 03).
 - Small multiples by corruption and severity, so patterns can be compared across cases.
 - Energy per inference shown as an attribute of these views, not as a separate metric chart.
@@ -88,11 +89,11 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 
 ## Risks and checks
 
-- **Hardware check first:** run one image through a small model on the card. Confirm it maps to the device, returns a prediction, and prints SDK statistics. I have not run the card for this project, so nothing here is verified yet.
-- **Energy is the biggest unknown.** Whether the AKD1000 SDK reports usable power/energy is not confirmed. If it does not, report energy as unavailable or estimated and say so. Do not present estimates as measurements.
-- **Open question: how does the baseline get an energy number?** The converted model runs on the chip. The quantized CNN baseline may only run on a CPU/GPU or the simulator, so "on-chip energy for both" may not be possible. Resolve in the hardware check. If not possible, report the baseline's energy with a different method, labeled as such, and do not compare the two as if measured alike.
+- **Hardware check:** done 05.11. AkidaNet maps to the AKD1000, `predict` returns class scores, and `model.statistics` reports energy per frame (about 84-85 mJ/frame including floor power on the ImageNet-C runs). See `Model prep/akidanet-model-prep.ipynb` and `Phase 1 - No AI/run_card.log`.
+- **Energy:** measured for the converted model only. The quantized Keras baseline runs on the CPU, so "on-chip energy for both" is not possible. If the baseline gets an energy number, label the method and do not compare the two as if measured alike. The near-constant mJ/frame across conditions is mostly floor power; check whether the dynamic part varies before reading anything into it.
+- **Card vs Keras agreement is about 0.75-0.8 on fog 1.** Disagreements are conversion rounding on images where Keras's top two classes are nearly tied. Top-1 accuracy matches to within about half a point. This divergence is the Phase I subject, not a bug.
 - **"SNN-converted":** MetaTF converts a quantized CNN into an event-based Akida model with low-bit integer activations. It is not a classic spiking network. Use the phrase as the course framing, but describe precisely what the chip does.
-- **Environment:** the Akida tools need specific Python and TensorFlow versions. Pin them in one environment file early.
+- **Environment:** the card runs used Python 3.11, TensorFlow 2.19.1, akida/cnn2snn 2.19.3, quantizeml 1.2.5, akida_models 1.14.2, with `TF_USE_LEGACY_KERAS=1`. Keep `requirements-akida.txt` pinned to these.
 - **Single machine:** the chip is in one server. Export data early so the group does not wait on it.
 - **Rasters:** not promised. Only attempted if easy.
 - **Public repo vs self-hosted runner:** the midpoint needs a public GitHub repo, but `docs/ci.md` advises against self-hosted runners on public repos. Before making it public, remove the `hw.yml` runner or restrict it (environment approval, no fork triggers), and keep the course PDFs and transcripts out. `Research/` holds those and is not tracked.
@@ -102,11 +103,11 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 
 | By | Step |
 |---|---|
-| 05.11 | Hardware check: one image through the card, check what SDK stats and energy it reports |
+| 05.11 | Hardware check: one image through the card, check what SDK stats and energy it reports. **Done.** |
 | 05.11 | Confirm the Moodle entry exists and matches the description below. Update it, do not duplicate. |
 | 05.11 | All four: agree the Phase I common direction (questions, data, starting view). Split into AI-aided and human-only pair. |
-| 07.11 | Network chosen, quantized and converted, clean accuracy for both |
-| 09.11 | Fog/noise/low-contrast run exported (`accuracy.csv`, `energy.csv`) |
+| 07.11 | Network chosen, quantized and converted, clean accuracy for both. **AkidaNet chosen and converted (05.11); clean accuracy still open.** |
+| 09.11 | Fog/noise/low-contrast run exported (`accuracy.csv`, `energy.csv`). **Done on card and simulator (05.11).** Both pairs' views still need to switch to these files. |
 | 10.11 | Pairs compare Phase I process and findings. Public repo ready with AI record and GenAI reflection. Video recorded. |
 | 11.11 | Midpoint submission (repo, AI record, reflection, 5-min video). Pairs then switch roles. |
 | 12.11 | Lab session 13:45-15:15 (S3 055 + online): Phase II practical examples and final submission/presentation details. Then all four agree the Phase II direction and which Phase I findings to follow up |
@@ -116,27 +117,28 @@ Group decision on the exact stack. The `akida` package has a software simulator,
 
 ## Description to hand in
 
-**Task/model:** quantized MobileNetV2/ResNet-18 vs. SNN counterpart on BrainChip Akida AKD1000 via MetaTF, on CIFAR-10-C
+**Task/model:** quantized AkidaNet (pretrained, ImageNet) vs. its SNN-converted counterpart on BrainChip Akida AKD1000 via MetaTF, on ImageNet-C
 
-**Phase I:** investigate where CNN and SNN behavior diverges under fog/noise/low-contrast at 5 severities, using confusion-matrix and projection views of agreement and confidence, and measured on-chip energy per inference
+**Phase I:** investigate where CNN and SNN behavior diverges under fog/noise/low-contrast at 5 severities, using confusion-matrix and projection views of agreement and confidence, and measured on-chip energy per inference of the converted model
 
 **Phase II:** explain the divergence with layer-wise activity/sparsity as spike-death proxy, combined with a second technique (for example saliency maps or k-nearest neighbors); full spike rasters only as stretch/limitation
 
 **AI4VIS:** use ChatGPT/Claude while building the Phase I/II views; log prompts and accepted/rejected/refined decisions; report failure patterns and best practices
 
-**References:** BrainChip MetaTF, ImageNet-C/CIFAR-C robustness benchmark
+**References:** BrainChip MetaTF and Akida 1.0 model zoo (AkidaNet), ImageNet-C robustness benchmark
 
 **Note:** group informed, only one entry, update existing entry if already registered
 
-Check the "measured on-chip energy" wording after the hardware check. If the SDK reports no usable energy numbers, or the baseline cannot be measured the same way, change the Phase I line before the midpoint.
+The Moodle entry still names MobileNetV2/ResNet-18 on CIFAR-10-C. Update the existing entry to the text above before 11.11; do not create a second one.
 
 ## Message for the group chat
 
-> Hi all! Update on our Moodle entry: we compare a quantized CNN baseline with its SNN-converted version on the BrainChip AKD1000, on clean images plus fog, noise and low-contrast corruptions (CIFAR-C style). Phase I: find where the two models diverge (confusion matrices, projections, accuracy and confidence, on-chip energy per inference). Phase II: explain it with layer-wise activity as a proxy for "spike death". AI4VIS: we log prompts and decisions while ChatGPT/Claude help us build the views, and report failure patterns and best practices. **You need no hardware.** I run the images on the chip and share CSV files; the `akida` package also has a simulator. Please check the entry on Moodle matches, and tell me if you want a different network or dataset before 11.11.
+> Hi all! Model change: MobileNetV2 does not convert for the AKD1000 (Akida 1.0), so we use BrainChip's pretrained quantized AkidaNet on ImageNet-C instead of CIFAR-10-C. No training needed. We compare the quantized Keras AkidaNet with its converted version on the card, under fog, noise and contrast at 5 severities. Phase I: find where the two models diverge (confusion matrices, projections, accuracy and confidence, on-chip energy per inference). Phase II: explain it with layer-wise activity as a proxy for "spike death". AI4VIS: we log prompts and decisions while ChatGPT/Claude help us build the views, and report failure patterns and best practices. **You need no hardware.** Card and simulator results are in `Phase 1 - No AI/results_card/` and `results_sim/` on the `yoshi-phase-1` branch. Please point your views at those files. I will update the Moodle entry.
 
 ## Sources and gaps
 
 - Course PDF "2026 AI VIS Lab 02 Assignment Introduction" (attached to CEL-1192).
 - BrainChip docs: https://doc.brainchipinc.com (Akida 1.0 model zoo and API reference).
 - The chip is an AKD1000 PCIe card (PCI id 0x1e7c:0xbca1, from the lab rig config).
-- Not verified: that the card returns power/energy data, how the baseline energy is measured, exact tool and Python versions for the chosen network, per-layer counts on hardware, and whether MobileNetV2/ResNet-18 convert cleanly for Akida 1.0.
+- Verified 05.11: AkidaNet converts for Akida 1.0 and runs on the card; the card reports energy per frame; tool versions (see Risks).
+- Not verified: clean ImageNet accuracy on our setup, an energy method for the Keras baseline, and per-layer activity counts on hardware (`results_sim/layers.csv` currently holds layer metadata, not `nonzero_count` per image).
