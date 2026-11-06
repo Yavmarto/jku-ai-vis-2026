@@ -1,0 +1,12 @@
+{
+    "team_name": "Team without a Name",
+    "students": [
+        {
+            "student_id": "k12110695",
+            "first_name": "Gabriel",
+            "last_name": "Zeisz",
+            "email": "gabriel.zeisz@icloud.com",
+            "github_user": "gabrielzeit"
+        }
+    ]
+}
