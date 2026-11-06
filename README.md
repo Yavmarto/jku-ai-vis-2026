@@ -23,5 +23,12 @@ python -m lab.evaluate cnn-float          # -> results/cnn-float/
 flock /tmp/akida.lock python -m lab.evaluate snn-hw --akida --hw
 ```
 
+```bash
+python -m lab.models                      # models/float.keras -> models/snn.fbz (Akida 2.0)
+python -m lab.evaluate snn-sim --akida    # software simulator, no card needed
+```
+
 `energy.csv` and `layers.csv` are not produced yet. Add them after the hardware check shows
-what the SDK reports. The akida/cnn2snn calls in `lab/models.py` are unverified.
+what the SDK reports. The `lab/models.py` conversion was run on the simulator on 2026-11-04.
+**MobileNetV2 converts only for Akida 2.0.** The AKD1000 is Akida 1.0, and conversion for it
+fails on the residual Add layers, so `snn-hw` needs a different network (see `lab/models.py`).
