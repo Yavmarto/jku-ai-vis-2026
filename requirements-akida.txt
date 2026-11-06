@@ -1,6 +1,8 @@
-# BrainChip MetaTF tools. Used on the self-hosted runner only.
-# TODO: pin exact versions (and the Python version) after the first hardware check.
-# The Akida tools constrain the Python and TensorFlow versions, so pick them once and keep them.
-akida
-cnn2snn
-quantizeml
+# BrainChip MetaTF tools + the TF they need. Python 3.10-3.12 (no akida wheels for 3.13).
+# Pinned to the versions the full pipeline ran with on 2026-11-04 (simulator).
+# lab/__init__.py sets TF_USE_LEGACY_KERAS=1: quantizeml only works with tf_keras models.
+akida==2.19.3
+cnn2snn==2.19.3
+quantizeml==1.2.5
+tensorflow~=2.19.0
+tf_keras~=2.19.0
