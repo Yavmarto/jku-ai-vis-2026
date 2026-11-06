@@ -1,0 +1,10 @@
+numpy
+pandas
+matplotlib
+scipy
+scikit-learn
+umap-learn
+nbformat
+nbclient
+ipykernel
+# only for make_hierarchy.py (the CSV is committed): nltk + python -m nltk.downloader wordnet
