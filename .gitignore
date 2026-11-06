@@ -31,3 +31,4 @@ Research
 *.tar.gz
 
 .parquet
+.agent
