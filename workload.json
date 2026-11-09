@@ -1,10 +1,10 @@
 {
-    "team_name": "Team without a Name",
+    "team_name": "Team without a name",
     "students": [
         {
             "first_name": "Gabriel",
             "last_name": "Zeisz",
-            "workload": 0.25
+            "workload": 19.2
         }
     ]
 } 

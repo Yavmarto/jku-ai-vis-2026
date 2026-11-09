@@ -10,3 +10,5 @@ tensorflow
 setuptools
 wheel
 umap-learn
+akida
+akida_models
