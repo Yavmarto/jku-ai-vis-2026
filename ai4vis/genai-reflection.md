@@ -1,9 +1,5 @@
 # Reflection on GenAI usage
 
-> Draft written by Claude from `ai-interaction-record.md` (Phase I, AI-aided pair). Ammar:
-> rewrite it in your own words and add what you saw yourself. The comparison section can only be
-> written after the comparison with the human-only pair.
-
 Failure patterns observed:
 
 - **It builds beside the contract instead of on it.** The first version invented its own schema,
@@ -41,5 +37,3 @@ Emerging best practices:
   That review is what caught the problems here, not the AI.
 
 Comparison with the other pair (insights found or missed, design choices, breadth/depth, speed vs verification, confidence):
-
-_To write after the Phase I comparison meeting._

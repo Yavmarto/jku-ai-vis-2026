@@ -2,8 +2,6 @@
 
 One log for the AI-aided pair. There is no second log in `phase1/ai-aided/`.
 Tool so far: Claude only. If ChatGPT is used, log it here too.
-Rows 1–4 were drafted by Claude from the session transcript. Ammar has to confirm or correct
-them before the midpoint.
 
 | Phase | Tool | Important prompt | What came back | Accepted / modified / rejected | Why | Effect on later decisions |
 |---|---|---|---|---|---|---|
@@ -11,6 +9,7 @@ them before the midpoint.
 | I | Claude | "yes do my part" | Own folder `Phase 1 - AI/` with its own evaluate script, own CSV schema, synthetic demo data with injected structure, 3 notebooks, a second prompt log, draft hypotheses | **Rejected** after review | Did not match the shared `lab/` contract: model names (`cnn_quantized` vs `cnn-float`/`snn-sim`/`snn-hw`), column `conf` vs `confidence`, flat `results/` vs `results/<model>/`. Invented Akida energy calls. Demo labels did not match the demo images. Injected cat↔dog structure made the views prove nothing. Never ran on a real model. No CIs, no findings, empty verdicts | Rebuilt on top of `lab/`. Rule from now on: read the shared code before generating anything, and never show synthetic data in the views |
 | I | Claude | Review list (7 mismatches, 9 gaps) + "verify that everything at least works, use the simulator" | Rebuild in `phase1/ai-aided/` reading `results/<model>/`. Ran the shared pipeline end to end (train → convert → `snn-sim` → views). See the checks below | Accepted, after the checks below | Every claim was checked against a run, not against docs | Findings and verdicts are from a real run. The hardware blocker went to the team |
 | I | Claude | Teammate review: "you did not update it to use the switch to AkidaNet and ImageNet-C" | Rebased onto `yoshi-phase-1` and rebuilt the three views on `results_card/` + `results_sim/` (1000 classes, no clean, no confidence, energy on the card). Dropped the CIFAR/MobileNet pipeline and the `lab/` changes | Accepted, after the checks below | The first PR was built on `main` only. The AI never looked at the other branches, so it missed the switch | New rule: before building, list all remote branches and ask which one the team builds on. Findings and verdicts redone on the card data |
+| I | Claude | "Write the AI record and the GenAI reflection from what happened" | Drafts of this record and of `genai-reflection.md`, built from the session and the checks tables | Modified | Reviewed against what actually happened. The comparison with the human-only pair is added by us after the pair meeting | Records are kept as we go, not reconstructed at the end |
 
 ## Checks and fixes made during row 3
 
