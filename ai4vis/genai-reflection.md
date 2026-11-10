@@ -36,4 +36,69 @@ Emerging best practices:
 - Review the AI's output against a checklist (schema, names, scales, uncertainty, provenance).
   That review is what caught the problems here, not the AI.
 
-Comparison with the other pair (insights found or missed, design choices, breadth/depth, speed vs verification, confidence):
+## Phase I comparison of the two pairs
+
+### Shared question and different approaches
+
+Both pairs asked how model behavior changes as inputs get harder to recognize and where the
+quantized Keras AkidaNet and its converted AKD1000 counterpart give different answers. We used the
+same card-run predictions for fog, Gaussian noise and contrast, each at five severities, with
+2,000 images per condition and two images per class. Severity 1 was the mild-corruption reference.
+The shared benchmark made it possible to compare what each analysis uncovered. [Card-run results](../Phase%201%20-%20No%20AI/results_card/)
+
+The human-only pair used a hardware deviation matrix to trace individual label changes, then
+used bootstrap intervals to test two specific hypotheses about groups of images. The AI-aided
+pair explored a wider set of views, including prediction frequencies by condition, WordNet group
+confusions, small multiples with uncertainty bands, and a projection of per-image prediction
+outcomes across severities. The matrix made particular Keras-to-card label changes easy to
+inspect. The condition-by-condition views made trends and reversals across severities easier to
+see. [Human-only deviation matrix](../Phase%201%20-%20No%20AI/view_confusion.ipynb) ·
+[AI-aided notebooks](../phase1/ai-aided/README.md)
+
+### What each pair uncovered
+
+The human-only pair found that dogs had a higher disagreement rate than devices and instruments
+under its interval rule in only 3 of 15 conditions. Gaussian noise met the rule for fewer
+cross-superclass disagreements on animal images in 0 of the 3 severities tested. The score
+follow-up gave a more specific result. For dog images whose two leading Keras labels were both
+breeds, the median top-two score gap was 0.212 on disagreements and 0.726 on agreements. The gap
+was also smaller on device disagreements. This makes close scores a useful lead to investigate
+in both groups. The AI-aided pair's broader group analysis also found little evidence that
+fine-grained animal groups lost agreement faster, although it used different group definitions
+and asked a different question. [Human-only hypothesis notebook](../Phase%201%20-%20No%20AI/view_hypotheses.ipynb) ·
+[AI-aided group findings](../phase1/ai-aided/findings/03.md)
+
+The AI-aided pair followed a reversal under Gaussian noise. Agreement rose from 65.9% at severity 3
+to 72.8% at severity 5, even though both models were below 1% accuracy at severity 5. The label
+frequencies showed that both models increasingly chose prayer rug, poncho and doormat. This
+explains how they could agree more often as their predictions got worse. In the human-only
+analysis, both models were wrong in 86.5% of disagreements across all conditions. Together these
+results show why accuracy and agreement answer different questions. The score follow-up explains
+where to look for closely ranked alternatives, and the frequency plots show how common wrong
+labels can dominate a condition. [AI-aided divergence findings](../phase1/ai-aided/findings/01.md) ·
+[Human-only hypothesis notebook](../Phase%201%20-%20No%20AI/view_hypotheses.ipynb)
+
+### What AI changed and what verification cost
+
+Claude helped the AI-aided pair explore visualization options and draft plotting code. The pair
+discarded the first version because it used an invented data schema and synthetic examples with
+patterns built into them. A teammate caught that a later version had missed the switch to
+AkidaNet. The usable views came after rebuilding around the shared card CSVs and checking the
+paired counts, labels and uncertainty. The human-only pair also spent time revising its approach.
+It reduced an unwieldy 1,000-class matrix to a focused comparison and reran Keras to recover
+the leading scores. The logs show different sources of rework, and they lack a common measure
+of total time. The benefit we can point to is the breadth of the verified AI-aided views. The
+clearest practice to carry forward is to give the tool the current model and data schema first,
+then verify generated findings on the shared data before reporting them. [AI interaction record](ai-interaction-record.md) ·
+[Human-only process log](../Phase%201%20-%20No%20AI/process-log.md)
+
+### Confidence and Phase II
+
+Direct counts support the shared-label pattern on this benchmark. The hypothesis verdicts
+depend on the specified interval rules, and the small number of images per class limits
+class-level conclusions. The top-two gaps are raw scores from a Keras rerun and establish
+an association with disagreement. To test possible explanations in Phase II, we can compare
+per-layer activity on matched examples where the models disagree and where both choose the
+same wrong label, using the same corruption and severity within each comparison.
+
+*Codex drafted this comparison from both pairs' notebooks and logs for review by both pairs.*
