@@ -14,6 +14,20 @@
             "last_name": "Martodihardjo",
             "email": "K12512727@students.jku.at",
             "github_user": "yavmarto"
+        },
+        {
+            "student_id": "k12142142",
+            "first_name": "Ammar",
+            "last_name": "Sjekirica",
+            "email": "K12142142@students.jku.at",
+            "github_user": "AmmarSjekirica"
+        },
+        {
+            "student_id": "k12020273",
+            "first_name": "Omer",
+            "last_name": "Becirovic",
+            "email": "K12020273@students.jku.at",
+            "github_user": "RemoeKjU"
         }
     ]
 }
