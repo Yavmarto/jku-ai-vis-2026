@@ -44,3 +44,31 @@ Tool so far: Claude only. If ChatGPT is used, log it here too.
 | "Disagreement 21 % at severity 1" (draft) | Recomputed per corruption | 21–26 %. Corrected | overclaim (caught) |
 | Energy as a divergence signal | Read the card notebook: floor 924 mW of ~958 mW | Spread is 1.4 % with one measurement per condition. Reported as a tiny effect, not used as a signal | overclaim (avoided) |
 | Every number in `findings/*.md` | Recomputed in a separate script from the CSVs | Matches after the two corrections above | — |
+
+# Phase II (AI-aided pair: Yoshi, Gabriel)
+
+The pairs switched roles after the midpoint. From here on this log is written by Yoshi and
+Gabriel, who were the human-only pair in Phase I. Tool so far: Claude (Claude Code, Opus).
+
+| Phase | Tool | Important prompt | What came back | Accepted / modified / rejected | Why | Effect on later decisions |
+|---|---|---|---|---|---|---|
+| II | Claude | "Please execute Phase 2, I am on the AI side" | Read proposal, team plan, both Phase I logs and all branches first (rule from Phase I row 4). Found the switch (we are now AI-aided) and the blocker: per-image layer activity needs `akida` (no macOS wheels) and the ImageNet-C images, neither on this laptop. Asked instead of guessing | Accepted | The AI stopped at the blocker instead of producing views on synthetic data (Phase I row 2 failure) | Layer export moved to `TODO-yoshi.md` |
+| II | Claude | Choice offered: kNN in embedding space / Grad-CAM / wait for the other pair. We picked kNN | kNN on the 512-d embeddings already in `results/akidanet_imagenetc.parquet`, no model run needed | Accepted | Runs on existing data; ties to the Phase I projection work | Second technique fixed on 26.11; the other pair should pick a different one |
+| II | Claude | (continuation) prototype before the notebook | Per-condition AUROCs for confidence, neighbour consensus and kNN distance. Then wrote `claims.md` with decision rules | Modified | Claims were fixed *after* the prototype. Noted in `claims.md` as an honesty note; the mechanisms come from Phase I, written before | Verdicts follow the written rules even where that makes them "partly" |
+| II | Claude | (continuation) build notebook, findings | `01_knn_embedding.ipynb`, `aiv2/`, `findings/01.md`, figures in `figures/phase2_ai/` incl. interactive UMAP | Accepted after checks below | Every number checked by a second script | C1 supported, C2/C3 partly |
+| II | Claude | (continuation) layer export | `export_layer_activity.py`, a draft using `akida.Model(path)`, `pop_layer()`, `forward()` | **Untested**, kept as a draft | akida could not be installed here, so the calls are unverified. Built-in `--check` asserts against `layers.csv` and Phase I predictions so a wrong call fails loudly | To run on the card machine; result goes into this table |
+
+## Checks and fixes made during Phase II rows 3–4
+
+| What the AI had claimed or written | Check | Result | Failure tag |
+|---|---|---|---|
+| The parquet's predictions are the card run | Merged with `results_card/predictions.csv` on image, corruption, severity | Identical on all 30 000 rows (both models) | — |
+| The embedding is the quantized Keras penultimate layer | Generator script not in the repo. Checked values: 512-d, 40 % negative | Plausible, not proven. Stated as an assumption in `knn.py` and the findings; question to the data owner in the TODO | overclaim (avoided) |
+| The embedding carries class information | Same-class partner among 15 nbrs vs chance | 21–25 % vs 0.75 % at severity 1 | — |
+| "SNN answer is supported by neighbours" (raw share) | A popular class is common among neighbours anyway, especially with sinks | Added a frequency-matched random-class baseline; effect holds in all 15 conditions | wrong-aggregation (avoided) |
+| "Neighbour consensus explains disagreement at high severity" | Could just be sink membership | Recomputed on non-sink images only: AUROC still 0.58–0.66 at severity 4–5 | hides-pattern (avoided) |
+| "Consensus overtakes confidence at severity 5" (from the line chart) | Paired bootstrap of the AUROC difference | Intervals include 0 (noise 5, contrast 5). Reworded to "catches up" | overclaim (caught) |
+| "Combining both beats either" | Applied the written rule per condition | Holds in 8 of 15 only, never at severity 1. Verdict partly | overclaim (caught) |
+| Two counts in the first draft of `findings/01.md` (6 of 15; 48–79 %) | Recounted from the notebook tables | 7 of 15 fail; 48–71 %. Corrected | overclaim (caught) |
+| UMAP legend | Looked at the PNG | Sink marker missing (legend drawn on a panel without sinks). Replaced with a figure-level legend | misleading label |
+| Every number in `findings/01.md` | `verify_numbers.py`: numpy brute-force kNN, rank AUROC, no shared code | Matches the notebook | — |
