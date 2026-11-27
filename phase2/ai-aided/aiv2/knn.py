@@ -5,11 +5,14 @@ conditions). Columns used: image_id, corruption, severity, true_label, cnn_pred,
 akida_pred, akida_conf, embedding (512 floats).
 
 What the embedding is: a 512-d vector per image and condition, signed (about 40 % of values are
-negative), so it is taken before a ReLU. AkidaNet 0.5 has 512 channels before the classifier,
-so this is most likely the quantized Keras model's penultimate features. The script that wrote
-the parquet is not in the repo (see phase2/ai-aided/TODO-yoshi.md). Treat it as the CNN's
-representation: kNN here explains where the *shared* representation is ambiguous, not what
-the chip computes.
+negative) and continuous (505 222 distinct values in the first 1000 rows), so it is neither a
+post-ReLU feature nor a 4-bit quantized activation. The script that wrote the parquet is not in
+the repo. The only AkidaNet extraction code in the repo (Phase 1 - No AI/view_embeddings.ipynb,
+float model, `model.layers[-2].input`, non-negative) gives *different* vectors for the same
+1500 image/condition rows: row-wise cosine median 0.118, same as a shuffled baseline (0.115).
+So the source layer and model are unknown (question to Gabriel, TODO-yoshi.md). What is known:
+it is semantic (same-class check in notebook 01). kNN here explains where *a* CNN-side
+representation is ambiguous, not what the chip computes.
 
 Neighbours are always searched *within one condition* (same corruption and severity), so
 severity cannot act as a confounder (lesson from Phase I, AI record row 3).

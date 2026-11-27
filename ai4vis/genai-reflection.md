@@ -102,3 +102,15 @@ per-layer activity on matched examples where the models disagree and where both 
 same wrong label, using the same corruption and severity within each comparison.
 
 *Codex drafted this comparison from both pairs' notebooks and logs for review by both pairs.*
+
+## Phase II notes (draft, AI-aided pair)
+
+- We broke one of our own Phase I rules on purpose: notebook 02 was tested on a synthetic CSV
+  before the layer export existed. No synthetic figure was kept or reported. It paid off: the
+  test showed that two of the L1 decision rules would have misread a layer that is already dead
+  at low severity. Lesson: synthetic data is fine for testing *rules and code*, never for
+  *views or findings*, and the real run must repeat the test (`--check` first).
+- An assumption we had marked "plausible" (embedding = quantized Keras penultimate layer) was
+  wrong, and we only found out a day later by comparing against the extraction code in the repo.
+  "Plausible, not proven" needs a check scheduled, not just a note.
+

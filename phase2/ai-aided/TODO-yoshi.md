@@ -18,14 +18,19 @@ machine. Everything else in Phase II (AI-aided) runs without it.
   the call does not exist).
   Output: `phase2/ai-aided/results/layers_activity.csv`, about 420 000 rows
   (30 000 images x 14 layers). Commit it.
-- [ ] **Confirm where the embedding comes from.** `results/akidanet_imagenetc.parquet` has a
-  512-d `embedding` column, but the script that wrote it (`view_eval_pipeline.py`) is not in
-  the repo. Which model (quantized Keras / float / Akida) and which layer? Add the script or a
-  line to `aiv2/knn.py`'s docstring. The kNN findings assume quantized Keras, penultimate.
-- [ ] **Then (with Claude):** build `02_layer_activity.ipynb`. Test L1 in `claims.md`: heatmap of
-  layer x severity coloured by non-zero share, one per corruption; and, within each condition,
-  last-layer activity of disagreeing vs agreeing images, and vs kNN consensus (combines the two
-  techniques).
+- [ ] **Ask Gabriel where the embedding comes from.** `results/akidanet_imagenetc.parquet` has a
+  512-d `embedding` column, but the script that wrote it is not in the repo
+  (`view_eval_pipeline.py` in git history is the old MobileNet/CIFAR one). Checked 27.11: the
+  values are signed and continuous, so not post-ReLU and not 4-bit quantized; and they do
+  **not** match `Phase 1 - No AI/results_card/predictions_with_embeddings.parquet` (Gabriel's
+  float-model `layers[-2].input`, 1500 rows): cosine 0.12, same as shuffled. Which model and
+  layer, and which preprocessing? Add the script to the repo and one line to `aiv2/knn.py`'s
+  docstring. Findings now say "unknown" instead of "quantized Keras, penultimate".
+- [ ] **Then:** `02_layer_activity.ipynb` is built (27.11, tested on synthetic data only).
+  Copy `layers_activity.csv` into `phase2/ai-aided/results/`, run
+  `jupyter nbconvert --to notebook --execute --inplace 02_layer_activity.ipynb`, fix what
+  breaks, then write `findings/02.md` against the L1 rules in `claims.md` and re-run
+  `python build_notebooks.py` + both notebooks so the findings cell is filled.
 - [ ] Agree with Ammar and Omer that the shared Phase II technique is layer sparsity and that
   our second one is kNN in embedding space (chosen 26.11), so the human-only pair picks a
   different second technique.
